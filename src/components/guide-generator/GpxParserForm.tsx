@@ -10,6 +10,7 @@ import {TrackPoint} from '@/types/track';
 import {ErrorResponse} from '@/types/error';
 import {useRawGpxSegment} from '@/stores/guide-generator/raw-gpx';
 
+// Submit Form Schema
 const FormSchema = z.object({
   file: z.preprocess(
     (val) => (val instanceof FileList ? val.item(0): val),
@@ -17,16 +18,22 @@ const FormSchema = z.object({
   )
 });
 
+// Input, Output Form Types
 type In = z.input<typeof FormSchema>;
 type Out = z.infer<typeof FormSchema>;
 
 const GpxParserForm = () => {
+  const rawGpxSegment = useRawGpxSegment((state) => state.segment);
   const updateRawGpxSegment = useRawGpxSegment((state) => state.init)
   const form = useForm<In, undefined, Out>({
     resolver: zodResolver(FormSchema),
     defaultValues: {},
   });
 
+  // 이미 gpx데이털르 업로드 했을 경우 보여줄 필요 없음
+  if (rawGpxSegment.length > 0) return (<div className="hidden"></div>);
+
+  // GPX 업로드 버튼 핸들러
   const submitHandler = (data: Out) => {
     const formData = new FormData();
     formData.append('file', data.file);
@@ -64,7 +71,7 @@ const GpxParserForm = () => {
               </FormItem>
             )}
           />
-          <Button className="mt-4 ml-auto block" type="submit">파싱</Button>
+          <Button className="mt-4 ml-auto block" type="submit">업로드</Button>
         </form>
       </Form>
     </div>
