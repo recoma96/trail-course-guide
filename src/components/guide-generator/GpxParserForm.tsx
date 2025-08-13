@@ -22,7 +22,7 @@ type Out = z.infer<typeof FormSchema>;
 
 const GpxParserForm = () => {
   const updateRawGpxSegment = useRawGpxSegment((state) => state.init)
-  const form = useForm<In, any, Out>({
+  const form = useForm<In, undefined, Out>({
     resolver: zodResolver(FormSchema),
     defaultValues: {},
   });

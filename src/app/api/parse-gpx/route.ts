@@ -33,8 +33,8 @@ export const POST = async (req: Request) => {
     gpxSegments.forEach((segment) => {
       const trackPoints = segment.trkpt;
       if (!Array.isArray(trackPoints)) {
-        // 배열이 아닐 경우 -> 트랙 구간이 아닌 것으로 간주
-        continue;
+        // 배열이 아닐 경우 -> 트랙 구간이 아닌 것으로 간주\
+        return;
       }
       trackPoints.forEach((point) => {
         parsedTrackPoints.push({
@@ -45,7 +45,7 @@ export const POST = async (req: Request) => {
       });
     });
     return NextResponse.json({trackPoints: parsedTrackPoints});
-  } catch (error) {
+  } catch {
     return NextResponse.json({error: 'Failed to parse GPX file'}, {status: 400});
   }
 };
