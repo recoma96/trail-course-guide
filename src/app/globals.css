@@ -11,6 +11,13 @@
   --max-width-mobile: 768px;
 }
 
+/* 공통 레이아웃 스타일 */
+.layout {
+  background-color: white;
+  margin-bottom: 30px;
+  padding: 20px 20px 20px 20px;
+}
+
 
 @theme inline {
   --color-background: var(--background);
