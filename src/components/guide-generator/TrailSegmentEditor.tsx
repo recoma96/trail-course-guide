@@ -5,6 +5,8 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {getCenterLocationFromTrackPoints} from '@/lib/geo';
 import Script from 'next/script';
 import {Button} from '@/components/ui/button';
+import {TRACK_SEGMENT_DIFFICULTY_ENUM, TrackPoint, TrackPointWithEndpoint, TrackSegment} from '@/types/track';
+import {useCourse} from '@/stores/guide-generator/course';
 
 const createMarkerIcon = (isEndPoint: boolean) => {
   const color = isEndPoint ? 'yellow' : 'blue';
@@ -12,9 +14,11 @@ const createMarkerIcon = (isEndPoint: boolean) => {
 }
 
 const TrailSegmentEditor = () => {
-  const segment = useRawGpxSegment((state) => state.segment);
-  const updateTrackPoint = useRawGpxSegment((state) => state.update);
-  const initSegment = useRawGpxSegment((state) => state.init);
+  const rawGpxSegment = useRawGpxSegment((state) => state.segment);
+  const updateRawGpxTrackPoint = useRawGpxSegment((state) => state.update);
+  const initRawGpxSegment = useRawGpxSegment((state) => state.init);
+  const initSegments = useCourse((state) => state.initSegments);
+  const course = useCourse((state) => state.course);
 
   // naver 모듈 로딩 완료 여부
   const [isNaverMapApiLoaded, setIsNaverMapApiLoaded] = useState(false);
@@ -24,11 +28,11 @@ const TrailSegmentEditor = () => {
 
   // 네이버맵 렌더링
   const createMap = useCallback(() => {
-    if (segment.length === 0) return;
+    if (rawGpxSegment.length === 0) return;
 
     // 네이버 맵은 처음일 때만 생성
     if (!mapRef.current) {
-      const center = getCenterLocationFromTrackPoints(segment);
+      const center = getCenterLocationFromTrackPoints(rawGpxSegment);
       mapRef.current = new naver.maps.Map('naver-map', {
         zoom: 15,
         center: new naver.maps.LatLng(center.latitude, center.longitude),
@@ -37,34 +41,54 @@ const TrailSegmentEditor = () => {
     const map = mapRef.current;
 
     // 마커 생성
-    segment.forEach((point, idx) => {
+    rawGpxSegment.forEach((point, idx) => {
       const marker = new naver.maps.Marker({
         position: new naver.maps.LatLng(point.latitude, point.longitude),
         map: map,
         icon: createMarkerIcon(point.isEndPoint)
       });
+      
+      // 마커 클링 이벤트 핸들러 등록
       naver.maps.Event.addListener(marker, 'click', () => {
         point.isEndPoint = !point.isEndPoint;
-        updateTrackPoint(idx, point);
+        updateRawGpxTrackPoint(idx, point);
       });
     });
-  }, [segment]);
+  }, [rawGpxSegment]);
 
   // segment 내용이 바뀔 때마다 리렌더링
   useEffect(() => {
-    if (isNaverMapApiLoaded && segment.length > 0) {
+    if (isNaverMapApiLoaded && rawGpxSegment.length > 0) {
       createMap();
     }
-  }, [isNaverMapApiLoaded, segment]);
+  }, [isNaverMapApiLoaded, rawGpxSegment]);
 
   // 초기화 버튼 핸들러
-  const initButtonHandler = () => {
+  const prevButtonHandler = () => {
     mapRef.current = null;
-    initSegment([]);
+    initRawGpxSegment([]);
   }
 
-  // 아직 GPX 데이터가 올라오지 않았을 경우 숨김처리
-  if (segment.length === 0) return (<div className="hidden"></div>)
+  const nextButtonHandler = () => {
+    // 유저가 찍은 엔드포인트 기준으로 코스 분할
+    const trackSegments = rawGpxSegment.reduce<TrackSegment[]>((segments, point) => {
+      if (point.isEndPoint || segments.length === 0) {
+        segments.push({
+          track: [],
+          name: '',
+          description: '',
+          difficulty: TRACK_SEGMENT_DIFFICULTY_ENUM[0]
+        });
+      }
+
+      segments[segments.length - 1].track.push(point);
+      return segments;
+    }, []);
+    initSegments(trackSegments);
+  }
+
+  // 아직 GPX 데이터가 올라오지 않았을 경우 나, 작업 완료시 안보이게 하기
+  if (rawGpxSegment.length === 0 || course.segments.length > 0) return (<div className="hidden"></div>)
 
   const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
@@ -82,8 +106,8 @@ const TrailSegmentEditor = () => {
       </div>
       <div id="naver-map" className="h-200 mb-10"></div>
       <div className="flex">
-        <Button type="button" className="mr-auto block" variant="destructive" onClick={initButtonHandler}>뒤로</Button>
-        <Button type="button" className="ml-auto block">다음</Button>
+        <Button type="button" className="mr-auto block" variant="destructive" onClick={prevButtonHandler}>뒤로</Button>
+        <Button type="button" className="ml-auto block" onClick={nextButtonHandler}>다음</Button>
       </div>
     </div>
   )

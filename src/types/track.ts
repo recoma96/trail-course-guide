@@ -39,7 +39,7 @@ export const COURSE_DIFFICULTY_ENUM: CourseDifficulty[] = [
 ]
 
 export interface TrackSegment {
-  track: TrackPointWithEndpoint[];
+  track: TrackPoint[];
   name: string;
   description: string;
   difficulty: TrackSegmentDifficulty;
