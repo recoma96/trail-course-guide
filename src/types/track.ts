@@ -15,8 +15,8 @@ interface Difficulty {
   color: string;
 }
 
-export interface TrackSegmentDifficulty extends Difficulty {}
-export interface CourseDifficulty extends Difficulty {}
+export type TrackSegmentDifficulty = Difficulty;
+export type CourseDifficulty = Difficulty;
 
 export const TRACK_SEGMENT_DIFFICULTY_ENUM: TrackSegmentDifficulty[]  = [
   {value: 0, code: 'UNKNOWN', koreanName: '알수없음', color: '#777777'},

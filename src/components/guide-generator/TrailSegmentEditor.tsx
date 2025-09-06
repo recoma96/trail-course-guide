@@ -1,11 +1,11 @@
 'use client';
 
 import {useRawGpxSegment} from '@/stores/guide-generator/raw-gpx';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {getCenterLocationFromTrackPoints} from '@/lib/geo';
 import Script from 'next/script';
 import {Button} from '@/components/ui/button';
-import {TRACK_SEGMENT_DIFFICULTY_ENUM, TrackPoint, TrackPointWithEndpoint, TrackSegment} from '@/types/track';
+import {TrackSegment, TRACK_SEGMENT_DIFFICULTY_ENUM} from '@/types/track';
 import {useCourse} from '@/stores/guide-generator/course';
 
 const createMarkerIcon = (isEndPoint: boolean) => {
@@ -27,7 +27,7 @@ const TrailSegmentEditor = () => {
   const mapRef = useRef<naver.maps.Map | null>(null);
 
   // 네이버맵 렌더링
-  const createMap = useCallback(() => {
+  const createMap = () => {
     if (rawGpxSegment.length === 0) return;
 
     // 네이버 맵은 처음일 때만 생성
@@ -47,14 +47,14 @@ const TrailSegmentEditor = () => {
         map: map,
         icon: createMarkerIcon(point.isEndPoint)
       });
-      
+
       // 마커 클링 이벤트 핸들러 등록
       naver.maps.Event.addListener(marker, 'click', () => {
         point.isEndPoint = !point.isEndPoint;
         updateRawGpxTrackPoint(idx, point);
       });
     });
-  }, [rawGpxSegment]);
+  };
 
   // segment 내용이 바뀔 때마다 리렌더링
   useEffect(() => {
