@@ -9,6 +9,8 @@ import {Button} from '@/components/ui/button';
 import {TrackPoint} from '@/types/track';
 import {ErrorResponse} from '@/types/error';
 import {useRawGpxSegment} from '@/stores/guide-generator/raw-gpx';
+import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
+import {SPLIT_SEGMENTS_PAGE, UPLOAD_GPX_PAGE} from '@/types/generate-step';
 
 // Submit Form Schema
 const FormSchema = z.object({
@@ -23,15 +25,15 @@ type In = z.input<typeof FormSchema>;
 type Out = z.infer<typeof FormSchema>;
 
 const GpxParserForm = () => {
-  const rawGpxSegment = useRawGpxSegment((state) => state.segment);
+  const pageCode = useGenerateGuideStep((state) => state.stepCode);
+  const setPageCode = useGenerateGuideStep((state) => state.setStepCode);
   const updateRawGpxSegment = useRawGpxSegment((state) => state.init)
   const form = useForm<In, undefined, Out>({
     resolver: zodResolver(FormSchema),
     defaultValues: {},
   });
 
-  // 이미 gpx데이털르 업로드 했을 경우 보여줄 필요 없음
-  if (rawGpxSegment.length > 0) return (<div className="hidden"></div>);
+  if (pageCode !== UPLOAD_GPX_PAGE) return (<div className="hidden"></div>);
 
   // GPX 업로드 버튼 핸들러
   const submitHandler = (data: Out) => {
@@ -47,6 +49,7 @@ const GpxParserForm = () => {
         return res.json() as Promise<{trackPoints: TrackPoint[]}>;
       }).then((data) => {
         updateRawGpxSegment(data.trackPoints);
+        setPageCode(SPLIT_SEGMENTS_PAGE);
       }).catch((err) => {
         alert(err.message);
       });

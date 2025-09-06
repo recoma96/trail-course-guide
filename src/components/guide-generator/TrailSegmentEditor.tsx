@@ -7,6 +7,8 @@ import Script from 'next/script';
 import {Button} from '@/components/ui/button';
 import {TrackSegment, TRACK_SEGMENT_DIFFICULTY_ENUM} from '@/types/track';
 import {useCourse} from '@/stores/guide-generator/course';
+import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
+import {EDIT_COURSE_PAGE, SPLIT_SEGMENTS_PAGE, UPLOAD_GPX_PAGE} from '@/types/generate-step';
 
 const createMarkerIcon = (isEndPoint: boolean) => {
   const color = isEndPoint ? 'yellow' : 'blue';
@@ -14,11 +16,12 @@ const createMarkerIcon = (isEndPoint: boolean) => {
 }
 
 const TrailSegmentEditor = () => {
+  const pageCode = useGenerateGuideStep((state) => state.stepCode);
+  const setPageCode = useGenerateGuideStep((state) => state.setStepCode);
   const rawGpxSegment = useRawGpxSegment((state) => state.segment);
   const updateRawGpxTrackPoint = useRawGpxSegment((state) => state.update);
   const initRawGpxSegment = useRawGpxSegment((state) => state.init);
   const initSegments = useCourse((state) => state.initSegments);
-  const course = useCourse((state) => state.course);
 
   // naver 모듈 로딩 완료 여부
   const [isNaverMapApiLoaded, setIsNaverMapApiLoaded] = useState(false);
@@ -58,15 +61,16 @@ const TrailSegmentEditor = () => {
 
   // segment 내용이 바뀔 때마다 리렌더링
   useEffect(() => {
-    if (isNaverMapApiLoaded && rawGpxSegment.length > 0) {
+    if (pageCode === SPLIT_SEGMENTS_PAGE && isNaverMapApiLoaded && rawGpxSegment.length > 0) {
       createMap();
     }
-  }, [isNaverMapApiLoaded, rawGpxSegment]);
+  }, [isNaverMapApiLoaded, rawGpxSegment, pageCode]);
 
   // 초기화 버튼 핸들러
   const prevButtonHandler = () => {
     mapRef.current = null;
     initRawGpxSegment([]);
+    setPageCode(UPLOAD_GPX_PAGE);
   }
 
   const nextButtonHandler = () => {
@@ -84,11 +88,14 @@ const TrailSegmentEditor = () => {
       segments[segments.length - 1].track.push(point);
       return segments;
     }, []);
+
+    mapRef.current = null;
     initSegments(trackSegments);
+    setPageCode(EDIT_COURSE_PAGE);
   }
 
   // 아직 GPX 데이터가 올라오지 않았을 경우 나, 작업 완료시 안보이게 하기
-  if (rawGpxSegment.length === 0 || course.segments.length > 0) return (<div className="hidden"></div>)
+  if (pageCode !== SPLIT_SEGMENTS_PAGE) return (<div className="hidden"></div>)
 
   const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 

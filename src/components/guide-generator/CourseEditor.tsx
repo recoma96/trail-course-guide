@@ -13,6 +13,8 @@ import {COURSE_DIFFICULTY_ENUM, TRACK_SEGMENT_DIFFICULTY_ENUM, TrackPoint, Track
 import {getCenterLocationFromTrackPoints} from '@/lib/geo';
 import Script from 'next/script';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
+import {EDIT_COURSE_PAGE, SPLIT_SEGMENTS_PAGE} from '@/types/generate-step';
 
 const SegmentFormSchema = z.object({
   name: z.string().min(1, '구간 이름은 필수로 입력해야 해요.'),
@@ -35,6 +37,8 @@ type Out = z.infer<typeof FormSchema>;
 const CourseEditor = () => {
 
   // Course Store Data
+  const pageCode = useGenerateGuideStep((state) => state.stepCode);
+  const setPageCode = useGenerateGuideStep((state) => state.setStepCode);
   const course = useCourse.getState().course;
   const resetCourse  = useCourse((state) => state.reset);
   const saveCourse  = useCourse((state) => state.save);
@@ -81,7 +85,7 @@ const CourseEditor = () => {
         center: new naver.maps.LatLng(center.latitude, center.longitude),
       });
     }
-  }, [isNaverMapApiLoaded, course.segments]);
+  }, [isNaverMapApiLoaded, course.segments, pageCode]);
 
   // 맵 위에 등산로 그리기
   useEffect(() => {
@@ -166,7 +170,13 @@ const CourseEditor = () => {
   });
 
   // course 데이터가 세팅이 되어있지 않음
-  if (course.segments.length === 0 || !hasHydrated.current) return (<div className="hidden"></div>);
+  if (pageCode !== EDIT_COURSE_PAGE || !hasHydrated.current) return (<div className="hidden"></div>);
+
+  const prevHandler = () => {
+    mapRef.current = null;
+    resetCourse();
+    setPageCode(SPLIT_SEGMENTS_PAGE);
+  }
 
   const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
@@ -311,7 +321,7 @@ const CourseEditor = () => {
           }
           <hr />
           <div className="flex mt-4">
-            <Button className="mr-auto block" type="button" variant="destructive" onClick={resetCourse}>뒤로</Button>
+            <Button className="mr-auto block" type="button" variant="destructive" onClick={prevHandler}>뒤로</Button>
             <div className="ml-auto block space-x-4">
               <Button type="submit">페이지 생성하기</Button>
             </div>
