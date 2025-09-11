@@ -69,7 +69,7 @@ const CourseGuideComponent = () => {
   const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
   return (
-    <div>
+    <div className="mx-4">
       {/* 네이버 맵 스크립트 부분 */}
       <Script
         strategy="afterInteractive"
