@@ -2,7 +2,19 @@
  
 <!-- [![Vercel](https://vercel.com/button)](https://trail-course-guide-printer.vercel.app/) Vercel 배포 후 URL을 여기에 추가하세요 -->
 
+
 [Trailine Prototype Project] GPX 파일과 코스 설명을 입력받아 맞춤형 등산/트레일 코스 가이드 페이지를 생성하고, PNG 파일로 저장 및 인쇄할 수 있는 웹 애플리케이션입니다.
+
+## Demo
+
+<p align="left">
+  <img src="./docs-assets/1.png" alt="A" width="400" />
+  <img src="./docs-assets/2.png" alt="B" width="400" />
+  <img src="./docs-assets/3.png" alt="C" width="400" />
+  <img src="./docs-assets/4.png" alt="C" width="400" />
+</p>
+
+
 
 ## ✨ 주요 기능 (Features)
 
