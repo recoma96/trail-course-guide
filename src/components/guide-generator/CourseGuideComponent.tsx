@@ -25,7 +25,7 @@ const CourseGuideComponent = () => {
   // 네이버맵 렌더링
   useEffect(() => {
     if (!isNaverMapApiLoaded || mapRef.current) return;
-    
+
     // 중앙 위경도 설정
     const center = getCenterLocationFromTrackPoints(
       course.segments.reduce((acc: TrackPoint[], cur: TrackSegment) => acc.concat(cur.track), [])
@@ -43,7 +43,7 @@ const CourseGuideComponent = () => {
     course.segments.forEach((segment, index) => {
       const strokeWeight = 6;
       const color = `${segment.difficulty.color}AA`;
-      
+
       const startMarker = new naver.maps.Marker({
         map: map,
         position: new naver.maps.LatLng(segment.track[0].latitude, segment.track[0].longitude),
@@ -62,14 +62,14 @@ const CourseGuideComponent = () => {
       });
     });
   }, [isNaverMapApiLoaded]);
-  
+
   // 하이드레이션 적용 전 로딩 처리
   if (!isMounted) return <div>Loading</div>
 
   const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
   return (
-    <div className="layout">
+    <div>
       {/* 네이버 맵 스크립트 부분 */}
       <Script
         strategy="afterInteractive"
@@ -84,14 +84,14 @@ const CourseGuideComponent = () => {
         <p className="mb-5">{course.subTitle}</p>
         <CourseDifficultyBadge difficulty={course.difficulty} />
       </div>
-      <div className="mt-5 mb-5">
+      <div className="mt-5">
         {course.description}
       </div>
       <hr />
-      <div id="naver-map" className={`h-200 mb-10`} style={{ border: `5px solid ${course.difficulty.color}AA`}}></div>
+      <div id="naver-map" className={`h-200`} style={{ border: `5px solid ${course.difficulty.color}AA`}}></div>
       <hr />
 
-      <div className="mt-4">
+      <div>
         { course.segments.map((segment, index) => (
           <div key={index} className="mb-10 border rounded-lg overflow-hidden">
             {/* 상단 제목 부분 */}
@@ -110,6 +110,7 @@ const CourseGuideComponent = () => {
           </div>
         ))}
       </div>
+      <hr />
     </div>
   );
 }
