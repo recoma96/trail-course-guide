@@ -15,6 +15,7 @@ import Script from 'next/script';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
 import {EDIT_COURSE_PAGE, SPLIT_SEGMENTS_PAGE} from '@/types/generate-step';
+import {useRouter} from 'next/navigation';
 
 const SegmentFormSchema = z.object({
   name: z.string().min(1, '구간 이름은 필수로 입력해야 해요.'),
@@ -47,6 +48,7 @@ const CourseEditor = () => {
   const [isNaverMapApiLoaded, setIsNaverMapApiLoaded] = useState(false); // naver 모듈 로딩 완료 여부
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState<number>(0); // 선택된 구간(세그먼트) 인덱스
   const [isSaveComplete, setIsSaveComplete] = useState<boolean>(false);
+  const router = useRouter();
 
   // refs
   const mapRef = useRef<naver.maps.Map | null>(null); // 네이버맵 변수
@@ -131,7 +133,7 @@ const CourseEditor = () => {
       saveTimerRef.current = setTimeout(() => {
         saveCourse({
           title: values.title ?? '',
-          subTitle: values.title ?? '',
+          subTitle: values.subTitle ?? '',
           description: values.description ?? '',
           difficulty: COURSE_DIFFICULTY_ENUM.find(difficulty => difficulty.code === values.difficulty) ?? COURSE_DIFFICULTY_ENUM[0],
           segments: (values.segments ?? []).map((segment, index) => ({
@@ -159,8 +161,7 @@ const CourseEditor = () => {
 
   // 결과 페이지로 넘아가기 위한 핸들러 함수
   const submitHandler = (data: Out) => {
-    // TODO 다음 페이지로 넘어가는 부분 개발 필요
-    console.log(data);
+    router.push('/guide-generator/result');
   }
 
   // 세그먼트 Form Field
