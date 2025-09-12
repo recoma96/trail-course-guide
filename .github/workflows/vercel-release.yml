@@ -1,0 +1,19 @@
+# .github/workflows/vercel-release.yml
+name: Deploy to Vercel (Release)
+
+on:
+  release:
+    types: [published]   # published 이벤트는 release와 pre-release 모두에 발생
+jobs:
+  deploy:
+    # if: ${{ github.event.release.prerelease == false }}  # pre-release는 스킵  - 0.1.0 이후에만 사용할 것
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm i -g vercel@latest
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
