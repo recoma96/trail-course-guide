@@ -204,7 +204,7 @@ const CourseEditor = () => {
         <p>코스 내용 작성하기 </p>
         <p>{isSaveComplete ? '자동저장 완료' : ''}</p>
       </div>
-      <p className="text-sm">정보를 수정할 때마다 2초 간격으로 자동 저장됩니다.</p>
+      <p className="text-sm">정보를 수정할 때마다 0.5초 간격으로 자동 저장됩니다.</p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submitHandler)} className="mt-11 space-y-8">
