@@ -1,0 +1,44 @@
+name: Bug Fix
+description: 앱 버그 발생
+title: '[BUG] '
+labels: ['bug']
+body:
+  - type: textarea
+    id: bug-report
+    attributes:
+      label: 🐞 Bug Report
+      description: 발생한 버그에 대한 설명을 적어주세요.
+      placeholder: '예: 로그인 버튼을 클릭해도 반응이 없습니다.'
+    validations:
+      required: true
+  - type: textarea
+    id: recreate
+    attributes:
+      label: 🧐 How to Recreate
+      description: 버그 재현 방법을 순서대로 적어주세요.
+      placeholder: |
+        1. 앱 실행
+        2. 로그인 화면으로 이동
+        3. 아이디와 비밀번호 입력 후 로그인 버튼 클릭
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 🤔 Expected Behavior
+      description: 예상했던 정상적인 동작은 어떤 것이었나요?
+      placeholder: '예: 로그인에 성공하고 메인 화면으로 이동해야 합니다.'
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 📸 Screenshot
+      description: 스크린샷이나 영상을 첨부해주세요. (이미지나 영상은 이슈 생성 후 드래그 앤 드롭으로 추가할 수 있습니다.)
+  - type: textarea
+    id: environment
+    attributes:
+      label: 💻 Environment
+      description: 버그가 발생한 환경을 알려주세요.
+      value: |
+        - Browser: 
+        - OS: 
+        - App Version:

@@ -1,0 +1,11 @@
+name: Ask A Question
+description: 질문있어요!
+labels: ['question']
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: ❓ Question
+      description: 질문 내용을 명확하게 작성해주세요.
+    validations:
+      required: true
