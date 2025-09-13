@@ -2,7 +2,7 @@
 
 import {useCourse} from '@/stores/guide-generator/course';
 import {useEffect, useRef, useState} from 'react';
-import CourseDifficultyBadge from '@/app/guide-generator/common/CourseDifficultyBadge';
+import CourseDifficultyBadge from '@/components/common/CourseDifficultyBadge';
 import Script from 'next/script';
 import {getCenterLocationFromTrackPoints} from '@/lib/geo';
 import {TrackPoint, TrackSegment} from '@/types/track';
