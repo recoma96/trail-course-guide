@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 
 const Home = () => {
@@ -14,9 +15,17 @@ const Home = () => {
             <Button asChild size="lg">
               <Link href="/guide-generator">코스 가이드 만들기</Link>
             </Button>
-            <Button disabled size="lg">
-              코스 검색하기
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {/* disabled 버튼에 툴팁을 적용하려면 감싸는 요소가 필요합니다. */}
+                  <span tabIndex={0}>
+                    <Button disabled size="lg">코스 검색하기</Button>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>출시 예정이에요!</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </div>
