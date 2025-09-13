@@ -126,7 +126,8 @@ const CourseEditor = () => {
   useEffect(() => {
     const sub = form.watch((values) => {
       // 하이드레이션 끝나지 않았을 경우 무시
-      if (!hasHydrated.current || course.segments.length < 1) return;
+      // 혹은 사용자가 직접 값을 변경하지 않은 경우 (!form.formState.isDirty)
+      if (!hasHydrated.current || course.segments.length < 1 || !form.formState.isDirty) return;
 
       // 디바운스
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -147,17 +148,26 @@ const CourseEditor = () => {
         // 저장 완료 토스트 실행
         if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
         setIsSaveComplete(true);
-        saveDoneTimerRef.current = setTimeout(() => {
-          setIsSaveComplete(false);
-        }, 1000);
-      }, 1000);
+      }, 500);
     });
     return () => {
       sub.unsubscribe();
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-      if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
     }
   }, [form, course.segments, saveCourse]);
+
+  // 저장 완료 여부 값에 대한 텍스트 노출 처리
+  useEffect(() => {
+    if (isSaveComplete) {
+      saveDoneTimerRef.current = setTimeout(() => {
+        setIsSaveComplete(false);
+      }, 1000);
+    }
+
+    return () => {
+      if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
+    }
+  }, [isSaveComplete]);
 
   // 결과 페이지로 넘아가기 위한 핸들러 함수
   const submitHandler = (data: Out) => {
