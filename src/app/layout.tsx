@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Orbit } from 'next/font/google';
+import {appConfig} from '@/config/app';
 
 const baseFont = Orbit({
   subsets: ['latin'],
@@ -34,7 +35,12 @@ export default function RootLayout({
       <body
         className={`${baseFont.className} ${geistSans.variable} ${geistMono.variable} bg-gray-200 antialiased`}
       >
-        <main className="w-full lg:max-w-mobile lg:mx-auto bg-gray-100 min-h-screen">{children}</main>
+        <main className="w-full lg:max-w-mobile lg:mx-auto bg-gray-100 min-h-screen">
+          {children}
+        </main>
+        <div className="fixed bottom-4 right-4">
+          <p className="text-xs text-gray-400">v{appConfig.version}</p>
+        </div>
       </body>
     </html>
   );
