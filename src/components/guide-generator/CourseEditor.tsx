@@ -16,6 +16,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
 import {EDIT_COURSE_PAGE, SPLIT_SEGMENTS_PAGE} from '@/types/generate-step';
 import {useRouter} from 'next/navigation';
+import {COURSE_DIFFICULTY_GUIDE_URL} from '@/vars';
 
 const SegmentFormSchema = z.object({
   name: z.string().min(1, '구간 이름은 필수로 입력해야 해요.'),
@@ -205,6 +206,7 @@ const CourseEditor = () => {
         <p>{isSaveComplete ? '자동저장 완료' : ''}</p>
       </div>
       <p className="text-sm">정보를 수정할 때마다 0.5초 간격으로 자동 저장됩니다.</p>
+      <a className="text-sm text-blue-600 hover:text-blue-800" href={COURSE_DIFFICULTY_GUIDE_URL}>코스 및 구간 난이도 가이드 보기</a>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submitHandler)} className="mt-11 space-y-8">
