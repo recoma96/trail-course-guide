@@ -6,6 +6,7 @@ import CourseDifficultyBadge from '@/components/common/CourseDifficultyBadge';
 import Script from 'next/script';
 import {getCenterLocationFromTrackPoints} from '@/lib/geo';
 import {TrackPoint, TrackSegment} from '@/types/track';
+import {NAVER_MAP_CLIENT_ID} from '@/vars';
 
 const CourseGuideComponent = () => {
   const course = useCourse((state) => state.course);
@@ -66,15 +67,13 @@ const CourseGuideComponent = () => {
   // 하이드레이션 적용 전 로딩 처리
   if (!isMounted) return <div>Loading</div>
 
-  const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
-
   return (
     <div className="mx-4">
       {/* 네이버 맵 스크립트 부분 */}
       <Script
         strategy="afterInteractive"
         type="text/javascript"
-        src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${naverMapClientId}`}
+        src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`}
         onReady={() => setIsNaverMapApiLoaded(true)}
       />
 

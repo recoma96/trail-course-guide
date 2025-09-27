@@ -16,7 +16,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {useGenerateGuideStep} from '@/stores/guide-generator/generate-guide-step';
 import {EDIT_COURSE_PAGE, SPLIT_SEGMENTS_PAGE} from '@/types/generate-step';
 import {useRouter} from 'next/navigation';
-import {COURSE_DIFFICULTY_GUIDE_URL} from '@/vars';
+import {COURSE_DIFFICULTY_GUIDE_URL, NAVER_MAP_CLIENT_ID} from '@/vars';
 
 const SegmentFormSchema = z.object({
   name: z.string().min(1, '구간 이름은 필수로 입력해야 해요.'),
@@ -190,14 +190,12 @@ const CourseEditor = () => {
     setPageCode(SPLIT_SEGMENTS_PAGE);
   }
 
-  const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
-
   return (
     <div className="layout">
       <Script
         strategy="afterInteractive"
         type="text/javascript"
-        src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${naverMapClientId}`}
+        src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`}
         onReady={() => setIsNaverMapApiLoaded(true)}
       />
 
