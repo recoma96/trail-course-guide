@@ -1,5 +1,5 @@
-import { version } from '../../package.json';
+import packageInfo from '../../package.json';
 
 export const appConfig = {
-  version,
+  version: packageInfo.version,
 };

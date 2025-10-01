@@ -171,7 +171,7 @@ const CourseEditor = () => {
   }, [isSaveComplete]);
 
   // 결과 페이지로 넘아가기 위한 핸들러 함수
-  const submitHandler = (data: Out) => {
+  const submitHandler = () => {
     router.push('/guide-generator/result');
   }
 
