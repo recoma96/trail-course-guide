@@ -29,42 +29,37 @@ const TrailSegmentEditor = () => {
   // 네이버맵 컴포넌트
   const mapRef = useRef<naver.maps.Map | null>(null);
 
-  // 네이버맵 렌더링
-  const createMap = () => {
-    if (rawGpxSegment.length === 0) return;
-
-    // 네이버 맵은 처음일 때만 생성
-    if (!mapRef.current) {
-      const center = getCenterLocationFromTrackPoints(rawGpxSegment);
-      mapRef.current = new naver.maps.Map('naver-map', {
-        zoom: 15,
-        center: new naver.maps.LatLng(center.latitude, center.longitude),
-      });
-    }
-    const map = mapRef.current;
-
-    // 마커 생성
-    rawGpxSegment.forEach((point, idx) => {
-      const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(point.latitude, point.longitude),
-        map: map,
-        icon: createMarkerIcon(point.isEndPoint)
-      });
-
-      // 마커 클링 이벤트 핸들러 등록
-      naver.maps.Event.addListener(marker, 'click', () => {
-        point.isEndPoint = !point.isEndPoint;
-        updateRawGpxTrackPoint(idx, point);
-      });
-    });
-  };
-
   // segment 내용이 바뀔 때마다 리렌더링
   useEffect(() => {
     if (pageCode === SPLIT_SEGMENTS_PAGE && isNaverMapApiLoaded && rawGpxSegment.length > 0) {
-      createMap();
+      if (rawGpxSegment.length === 0) return;
+
+      // 네이버 맵은 처음일 때만 생성
+      if (!mapRef.current) {
+        const center = getCenterLocationFromTrackPoints(rawGpxSegment);
+        mapRef.current = new naver.maps.Map('naver-map', {
+          zoom: 15,
+          center: new naver.maps.LatLng(center.latitude, center.longitude),
+        });
+      }
+      const map = mapRef.current;
+
+      // 마커 생성
+      rawGpxSegment.forEach((point, idx) => {
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(point.latitude, point.longitude),
+          map: map,
+          icon: createMarkerIcon(point.isEndPoint)
+        });
+
+        // 마커 클링 이벤트 핸들러 등록
+        naver.maps.Event.addListener(marker, 'click', () => {
+          point.isEndPoint = !point.isEndPoint;
+          updateRawGpxTrackPoint(idx, point);
+        });
+      });
     }
-  }, [isNaverMapApiLoaded, rawGpxSegment, pageCode]);
+  }, [isNaverMapApiLoaded, rawGpxSegment, pageCode, updateRawGpxTrackPoint]);
 
   // 초기화 버튼 핸들러
   const prevButtonHandler = () => {

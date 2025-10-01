@@ -45,7 +45,7 @@ const CourseGuideComponent = () => {
       const strokeWeight = 6;
       const color = `${segment.difficulty.color}AA`;
 
-      const startMarker = new naver.maps.Marker({
+      new naver.maps.Marker({
         map: map,
         position: new naver.maps.LatLng(segment.track[0].latitude, segment.track[0].longitude),
         icon: {
@@ -55,14 +55,14 @@ const CourseGuideComponent = () => {
         clickable: true,
       });
 
-      const polyLine = new naver.maps.Polyline({
+      new naver.maps.Polyline({
         map: map,
         path: segment.track.map((trackPoint) => new naver.maps.LatLng(trackPoint.latitude, trackPoint.longitude)),
         strokeColor: color,
         strokeWeight: strokeWeight,
       });
     });
-  }, [isNaverMapApiLoaded]);
+  }, [isNaverMapApiLoaded, course.segments]);
 
   // 하이드레이션 적용 전 로딩 처리
   if (!isMounted) return <div>Loading</div>

@@ -27,7 +27,7 @@ export const useCourse = create<State>()(
           description: '',
           difficulty: COURSE_DIFFICULTY_ENUM[0],
       }}),
-      save: (newCourse: Course) => set((state) => ({course: newCourse})),
+      save: (newCourse: Course) => set(() => ({course: newCourse})),
     }),
     {
       name: 'course',
