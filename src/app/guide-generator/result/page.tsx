@@ -51,9 +51,9 @@ const GuideGeneratorResultPage = () => {
           },
           description: segment.description,
           track: segment.track.map(point => ({
-            latitude: point.latitude,
-            longitude: point.longitude,
-            elevation: point.elevation,
+            lat: point.latitude,
+            lon: point.longitude,
+            ele: point.elevation,
           })),
         })
       )
