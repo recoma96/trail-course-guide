@@ -2,22 +2,18 @@ changelog:
   categories:
     - title: 🚀 기능 추가 및 기능변경
       labels:
-        - feat
         - feature
         - change
     - title: 🐞 오류 해결
       labels:
-        - fix
-        - hotfix
+        - bug
     - title: ⚙️ 성능 및 구조 개선
       labels:
+        - enhancement
         - refactor
-        - perf
+    - title: Others
+
   exclude:
     labels:
-      - docs
+      - documentation
       - chore
-      - ci
-      - test
-      - build
-      - style
