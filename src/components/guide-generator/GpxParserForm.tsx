@@ -64,12 +64,12 @@ const GpxParserForm = () => {
             control={form.control}
             render={({field}) => (
               <FormItem>
-                <FormLabel>GPX 파일 파싱</FormLabel>
+                <FormLabel>트레킹/하이킹 코스 데이터 추출</FormLabel>
                 <FormControl>
                   <Input id="gpx" type="file" accept=".gpx" onChange={(e) => field.onChange(e.target.files)}/>
                 </FormControl>
                 <FormDescription>
-                  GPX파일을 파싱합니다.
+                  GPX파일을 분석해서 코스를 파싱합니다.
                 </FormDescription>
               </FormItem>
             )}
