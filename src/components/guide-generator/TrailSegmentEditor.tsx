@@ -103,8 +103,9 @@ const TrailSegmentEditor = () => {
         onReady={() => setIsNaverMapApiLoaded(true)}
       />
       <div className="mb-5">
-        <p className="text-lg">구간 나누기 (엔드포인트 설정)</p>
-        <p className="text-sm">파란색 모양의 트랙 포인트를 클릭하면, 포인트가 노란색으로 변했는데, 이는 그 포인트를 기준으로 구간을 둘로 나눈다는 것을 의미합니다 </p>
+        <p className="text-lg mb-2">구간 나누기 (엔드포인트 설정)</p>
+        <p className="text-sm">GPX에서의 트랙에서 파란색 점을 클릭해 구간을 분리합니다.</p>
+        <p className="text-sm">클릭한 부분은 노란색 점으로 표시됩니다. 이 노란색을 중삼으로 구간이 나누어 집니다.</p>
       </div>
       <div id="naver-map" className="h-200 mb-10"></div>
       <div className="flex">
