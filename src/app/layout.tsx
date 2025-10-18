@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Orbit } from 'next/font/google';
+import { Nanum_Gothic } from 'next/font/google';
 import {appConfig} from '@/config/app';
 
-const baseFont = Orbit({
+const baseFont = Nanum_Gothic({
   subsets: ['latin'],
   weight: ['400']
 })
